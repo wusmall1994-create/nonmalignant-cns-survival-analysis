@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the archived release."
+title: "Statistical analysis code for nonmalignant brain and CNS tumor survival"
+type: software
+authors:
+  - name: "wusmall1994-create"
+repository-code: "https://github.com/wusmall1994-create/nonmalignant-cns-survival-analysis"
+license: MIT
+version: 1.0.0
+date-released: 2026-08-31
+keywords:
+  - restricted loss in life expectancy
+  - relative survival
+  - Pohar-Perme
+  - Ederer II
+  - SEER
+  - brain tumors
+  - central nervous system tumors
+
