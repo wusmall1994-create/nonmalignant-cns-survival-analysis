@@ -1,5 +1,7 @@
 # Statistical analysis code for nonmalignant brain and CNS tumor survival
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22207634.svg)](https://doi.org/10.5281/zenodo.22207634)
+
 This repository contains the statistical analysis code used to estimate restricted loss in life expectancy (RLEL), compare Ederer II and Pohar–Perme relative-survival estimators, evaluate subgroup heterogeneity, perform individual-level bootstrap and adjusted survival analyses, and generate publication figures.
 
 ## Privacy and data availability
@@ -80,3 +82,6 @@ The repository reproduces the statistical workflow when supplied with authorized
 
 The source code is released under the MIT License. The license applies only to the code and does not grant rights to SEER data or other third-party materials.
 
+## Citation
+
+For an exact software version, cite release `v1.0.0` using DOI [`10.5281/zenodo.22207635`](https://doi.org/10.5281/zenodo.22207635). To cite the software independently of version, use the concept DOI [`10.5281/zenodo.22207634`](https://doi.org/10.5281/zenodo.22207634).
