@@ -1,19 +1,16 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite the archived release."
-title: "Statistical analysis code for nonmalignant brain and CNS tumor survival"
+message: "Please cite the archived software release."
+title: "Nonmalignant CNS tumor survival: RMST and relative survival analysis code"
 type: software
 authors:
   - name: "wusmall1994-create"
 repository-code: "https://github.com/wusmall1994-create/nonmalignant-cns-survival-analysis"
-doi: "10.5281/zenodo.22207635"
 license: MIT
-version: 1.0.0
-date-released: 2026-08-31
+version: 2.0.0
+date-released: 2026-10-25
 keywords:
-  - restricted loss in life expectancy
+  - restricted mean survival time
   - relative survival
-  - Pohar-Perme
-  - Ederer II
+  - age standardization
+  - Ederer I
   - SEER
-  - brain tumors
-  - central nervous system tumors

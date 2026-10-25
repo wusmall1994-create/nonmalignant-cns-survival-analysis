@@ -1,0 +1,10 @@
+{
+  "title": "Nonmalignant CNS tumor survival: RMST and relative survival analysis code",
+  "upload_type": "software",
+  "description": "Statistical analysis source code for expected minus observed ten-year restricted mean survival time, internal age standardization, relative survival, age-specific and classification analyses, fixed-reference uncertainty checks, and diagnostic-confirmation sensitivity analyses. Includes source code and operating documentation only. No manuscript, data, individual records, results, session files or credentials are distributed. Authorized SEER inputs must be obtained independently.",
+  "creators": [{"name": "wusmall1994-create"}],
+  "license": "MIT",
+  "version": "2.0.0",
+  "keywords": ["restricted mean survival time", "relative survival", "SEER", "nonmalignant CNS tumors", "age standardization"],
+  "access_right": "open"
+}

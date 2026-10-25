@@ -1,19 +1,12 @@
-# Privacy-first whitelist: analysis source and package metadata only.
+# Allow only the reviewed source and documentation files.
 *
 !.gitignore
+!analyze.py
+!make_figures.py
+!run_analysis.py
+!requirements.txt
 !README.md
+!INPUTS.md
 !LICENSE
 !CITATION.cff
-!requirements.txt
-!R-packages.txt
-!analyze.py
-!audit_sessions.R
-!individual_analysis.R
-!make_figures.R
-!pohar_perme_analysis.R
-!advanced_robustness_analysis.R
-!run_all.ps1
-
-# Generated output is never versioned.
-outputs/
-
+!.zenodo.json

@@ -1,87 +1,41 @@
-# Statistical analysis code for nonmalignant brain and CNS tumor survival
+# Nonmalignant CNS tumor survival analysis
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22207634.svg)](https://doi.org/10.5281/zenodo.22207634)
+Final statistical analysis code for ten-year expected minus observed restricted mean survival time (RMST) and relative survival in nonmalignant central nervous system tumor groups.
 
-This repository contains the statistical analysis code used to estimate restricted loss in life expectancy (RLEL), compare Ederer II and Pohar–Perme relative-survival estimators, evaluate subgroup heterogeneity, perform individual-level bootstrap and adjusted survival analyses, and generate publication figures.
+## Contents
 
-## Privacy and data availability
+- `analyze.py`: export parsing; actuarial RMST and Greenwood covariance; common internal age standardization; all-age and actual age profiles; age-range sensitivity; histology/behavior composition; landmark relative survival; conditional survival; exploratory diagnosis-period contrasts; fixed-reference resampling; and diagnostic-confirmation checks.
+- `make_figures.py`: main and supplementary figures from locally generated aggregate tables.
+- `run_analysis.py`: runs both scripts in order.
+- `INPUTS.md`: authorized input filenames, required fields and export conventions.
+- `requirements.txt`: tested Python dependencies (Python 3.12.14).
 
-No manuscript, raw data, case-level records, SEER\*Stat session files, exported results, patient identifiers, credentials, or personal information are included. The code expects locally generated SEER\*Stat exports. SEER data remain subject to the SEER Research Data Agreement and must be obtained independently by an eligible registered user.
+## Run
 
-Do not commit files with the extensions `.txt`, `.dic`, or `.ss` to this repository. The repository uses a whitelist `.gitignore` so that only source code and package metadata are tracked.
-
-## Software
-
-- SEER\*Stat 9.0.43.0 for cohort construction and survival exports
-- Python 3.12 with the packages listed in `requirements.txt`
-- R 4.6.1 with the packages listed in `R-packages.txt`
-- PowerShell 7 or Windows PowerShell 5.1 for the orchestration script
-
-## Configuration
-
-Set the following environment variables before running the workflow:
-
-- `SEER_EXPORT_DIR` (required): directory containing the locally generated SEER\*Stat exports.
-- `ANALYSIS_OUTPUT_DIR` (optional): destination for generated analyses, figures, tables, reports, and QA logs. Defaults to `outputs/` inside the repository, which is ignored by Git.
-- `PYTHON_EXE` (optional): full path to the Python executable. If omitted, `python.exe` on `PATH` is used.
-- `RSCRIPT_EXE` (optional): full path to `Rscript.exe`. If omitted, `Rscript.exe` on `PATH` is used.
-- `BOOT_REPS` (optional): number of patient-level bootstrap replicates; default 1000 and minimum 200.
-
-Example in PowerShell:
+Use a Python environment with the listed dependencies. Obtain the required SEER exports independently. In PowerShell:
 
 ```powershell
-$env:SEER_EXPORT_DIR = 'X:\path\to\authorized\seer_exports'
-$env:ANALYSIS_OUTPUT_DIR = 'X:\path\to\analysis_outputs'
-$env:PYTHON_EXE = 'X:\path\to\python.exe'
-$env:RSCRIPT_EXE = 'X:\path\to\Rscript.exe'
-$env:BOOT_REPS = '1000'
-.\run_all.ps1
+$env:SEER_EXPORT_DIR = 'X:\authorized_exports'
+$env:SEER_SURVIVAL_EXPORT_DIR = 'X:\authorized_exports\survival_exports'
+$env:ANALYSIS_OUTPUT_DIR = 'X:\local_results'
+$env:PRIVATE_WORK_DIR = 'X:\private_intermediates'
+python run_analysis.py
 ```
 
-## Script order
+`SEER_EXPORT_DIR` is required. The other defaults are its `survival_exports` subdirectory, `outputs`, and `work/private`, respectively. Relative paths resolve against the working directory. Private intermediate pickles contain case-level records and must remain local. Figure outputs are TIFF/SVG, with local PNG previews.
 
-1. `analyze.py` parses SEER\*Stat relative-survival exports, integrates observed and expected survival curves, estimates RLEL, computes subgroup contrasts and age-standardized trends, and writes source-file checksums.
-2. `individual_analysis.R` performs patient-level cohort construction, bootstrap overall-survival estimates, adjusted Cox models, proportional-hazards diagnostics, and time-varying sensitivity models.
-3. `audit_sessions.R` verifies exported dictionaries, grouping variables, time horizons, estimator labels, and the presence of matching local export/session files.
-4. `pohar_perme_analysis.R` compares Ederer II and Pohar–Perme relative-survival estimates and prepares estimator-sensitivity tables and figures.
-5. `advanced_robustness_analysis.R` performs direct age standardization, morphology decomposition, diagnosis-period models, and relative RLEL analyses.
-6. `make_figures.R` generates the main RLEL and subgroup figures from the analysis outputs.
+## Statistical definitions
 
-`run_all.ps1` executes these scripts in the above dependency order.
+The primary horizon is 120 months. Monthly trapezoidal integration estimates observed and expected RMST separately. The difference is expected minus observed RMST. Identical empirical five-year age weights from the primary cohort at ages 20–79 standardize both components. Proportional difference is 100 times the standardized difference divided by standardized expected RMST. Landmark relative survival is the ratio of separately standardized survival probabilities, rather than an average of age-specific ratios.
 
-## Required local exports
+Confidence intervals use Greenwood covariance for observed survival, conditional on fixed expected curves and age weights. Fixed-reference resampling uses 2,000 multinomial draws with seed 20261024. It does not repeat individual life-table matching. Incomplete age-specific curves are not extrapolated. Confirmation-specific comparisons use each subgroup's own Ederer I reference. Conditional survivor results are unstandardized all-cause outcomes; period comparisons are exploratory.
 
-The code references the following SEER\*Stat export families. These files are inputs only and are intentionally absent from this repository:
+## Data access and privacy
 
-- Ederer II relative-survival exports for 5-, 10-, and 15-year overall analyses
-- Ederer II subgroup exports for behavior, brain/CNS recode, C75 primary site, sex, age, and diagnosis year
-- Matching Pohar–Perme exports for overall, behavior, sex, and diagnosis-year analyses
-- `nonmalignant_CNS_case_listing_2004_2023.txt`
-- `nonmalignant_CNS_case_listing_2004_2023_SES_treatment.txt`
-- Corresponding `.dic` files and, for the local audit only, `.ss` session files
+Only source code and its operating documentation are distributed. No manuscript, original or aggregate dataset, individual record, identifier value, session file, dictionary, result, credential or local user path is included. Field names such as `Patient ID` describe the required input schema and contain no actual identifiers. SEER data and life-table access remain subject to SEER requirements: https://seer.cancer.gov/data/access.html . Execution requires authorized local inputs; this repository cannot reproduce numerical results without them.
 
-Exact input stems and required columns are defined in the scripts, making missing or incompatible exports fail with an explicit error.
+Generated records and results are excluded by the allowlist `.gitignore`. Assertions target the documented study cohort, rather than arbitrary replacement cohorts. The public license applies to code only and grants no rights to third-party data.
 
-## Outputs
+## License and citation
 
-Generated files are organized under `ANALYSIS_OUTPUT_DIR`:
-
-- `analysis/`: analysis tables and checksums
-- `figures/`: SVG, PDF, TIFF, and PNG figures plus R session information
-- `tables/`: supplementary Markdown tables
-- `reports/`: analysis summaries
-- `qa_logs/`: session/export audit report
-
-Generated outputs are excluded from version control because they may derive from restricted SEER data.
-
-## Reproducibility and limitations
-
-The repository reproduces the statistical workflow when supplied with authorized exports created using the documented variable names and SEER\*Stat settings. SEER data and SEER\*Stat itself cannot be redistributed here. Software versions are pinned to the environment used for the archived release; later package versions may require minor compatibility changes.
-
-## License
-
-The source code is released under the MIT License. The license applies only to the code and does not grant rights to SEER data or other third-party materials.
-
-## Citation
-
-For an exact software version, cite release `v1.0.0` using DOI [`10.5281/zenodo.22207635`](https://doi.org/10.5281/zenodo.22207635). To cite the software independently of version, use the concept DOI [`10.5281/zenodo.22207634`](https://doi.org/10.5281/zenodo.22207634).
+MIT License. Cite the exact archived release using `CITATION.cff` and the DOI displayed in the release record.
